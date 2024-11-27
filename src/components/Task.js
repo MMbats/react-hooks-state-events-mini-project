@@ -1,13 +1,16 @@
-// src/components/Task.js
-import React from 'react';
+import React from "react";
 
-function Task({ task, onDelete }) {
+function Task({ text, category, onDeleteTask }) {
   return (
-    <div>
-      <span>{task.text} - {task.category}</span>
-      <button onClick={() => onDelete(task.id)}>Delete</button>
+    <div className="task" role="listitem">
+      <div className="label">{category}</div>
+      <div className="text">{text}</div>
+      <button className="delete" onClick={onDeleteTask}>
+        X
+      </button>
     </div>
   );
 }
 
-export default Task;  // Make sure to export as default
+export default Task;
+

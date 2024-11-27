@@ -1,35 +1,37 @@
-// In src/components/App.js
-import React, { useState } from 'react';  // Add the useState import if missing
-import CategoryFilter from './CategoryFilter';
-import NewTaskForm from './NewTaskForm';
-import TaskList from './TaskList';
+import React, { useState } from "react";
+import TaskList from "./TaskList";
+import NewTaskForm from "./NewTaskForm";
+import CategoryFilter from "./CategoryFilter";
+import { TASKS, CATEGORIES } from "../data";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(TASKS);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const categories = ["All", "Work", "Personal"];
 
-  const handleTaskFormSubmit = (task) => {
-    setTasks(prevTasks => [...prevTasks, task]);
+  const filteredTasks =
+    selectedCategory === "All"
+      ? tasks
+      : tasks.filter((task) => task.category === selectedCategory);
+
+  const deleteTask = (taskText) => {
+    setTasks(tasks.filter((task) => task.text !== taskText));
   };
 
-  const handleDeleteTask = (taskId) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+  const addTask = (newTask) => {
+    setTasks([...tasks, newTask]);
   };
-
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const filteredTasks = selectedCategory === "All" ? tasks : tasks.filter(task => task.category === selectedCategory);
 
   return (
     <div>
-      <CategoryFilter categories={categories} onCategorySelect={handleCategorySelect} />
-      <NewTaskForm categories={categories} onTaskFormSubmit={handleTaskFormSubmit} />
-      <TaskList tasks={filteredTasks} onDelete={handleDeleteTask} />
+      <CategoryFilter
+        categories={CATEGORIES}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
+      <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={addTask} />
+      <TaskList tasks={filteredTasks} onDeleteTask={deleteTask} />
     </div>
   );
 }
 
-export default App;  // Make sure to export App as the default export
+export default App;
